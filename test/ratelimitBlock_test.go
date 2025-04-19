@@ -28,7 +28,7 @@ func UnBlock() bool {
 	reteLimitRequestBlock := cfg.RateLimitTimeBlock
 	time.Sleep(time.Duration(reteLimitRequestBlock+1) * time.Second)
 
-	req, _ = http.NewRequest("GET", "http://127.0.0.1:"+cfg.Port, nil)
+	req, _ = http.NewRequest("GET", "http://app:"+cfg.Port, nil)
 
 	ctx, cancel := context.WithTimeout(req.Context(), 1*time.Second)
 	defer cancel()
@@ -44,7 +44,7 @@ func TestRateLimitBlock(t *testing.T) {
 	reteLimitRequest := cfg.RateLimitRequest
 
 	for i = 0; i <= reteLimitRequest; i++ {
-		req, err = http.NewRequest("GET", "http://127.0.0.1:"+cfg.Port, nil)
+		req, err = http.NewRequest("GET", "http://app:"+cfg.Port, nil)
 		assert.NoError(t, err, "creating request should not fail")
 		ctx, cancel := context.WithTimeout(req.Context(), 1*time.Second)
 		defer cancel()
