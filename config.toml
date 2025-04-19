@@ -1,0 +1,19 @@
+[api]
+host = "0.0.0.0"
+port = 8080
+environment = "staging"
+timezone = "America/Sao_Paulo"
+rate_limit_request = 5
+rate_limit_time_second = 10
+rate_limit_time_block_second = 120 ## 2 minutes
+
+[redis]
+host = "127.0.0.1"
+password = ""
+port = 6379
+db = 10
+
+[logs]
+dir = "logs"
+file = false
+db = true

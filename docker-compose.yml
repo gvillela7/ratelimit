@@ -1,0 +1,34 @@
+version: "3.7"
+
+x-logging:
+  &logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-deploy:
+  &deploy
+  deploy:
+    replicas: 1
+    update_config:
+      parallelism: 2
+      delay: "10s"
+    restart_policy:
+      condition: on-failure
+
+services:
+  redis:
+    image: redis:3.2.5-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - limit
+    <<: [*logging, *deploy]
+
+networks:
+  limit:
+    driver: overlay
+  public:
+    external: true
