@@ -5,6 +5,8 @@ environment = "staging"
 timezone = "America/Sao_Paulo"
 rate_limit_request = 5
 rate_limit_time_second = 10
+rate_limit_request_by_token = 10
+rate_limit_time_second_by_token = 10
 rate_limit_time_block_second = 120 ## 2 minutes
 
 [redis]

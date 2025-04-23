@@ -15,12 +15,12 @@ func Limit(c redis2.IRedis, next http.Handler) http.Handler {
 		cfg := configs.GetAPIConfig()
 		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 		token := r.Header.Get("API_KEY")
-		rateLimiter, _ := c.NewRateLimit(cfg.RateLimitRequest, time.Duration(cfg.RateLimitTimeSecond)*time.Second)
 
 		if token != "" {
+			rateLimiter, _ := c.NewRateLimit(cfg.RateLimitRequestByToken, time.Duration(cfg.RateLimitTimeSecondByToken)*time.Second)
 			result, _ := c.Allow(token, rateLimiter)
 			if !result {
-				rateLimiter, _ = c.NewRateLimit(cfg.RateLimitRequest, time.Duration(cfg.RateLimitTimeBlock)*time.Second)
+				rateLimiter, _ = c.NewRateLimit(cfg.RateLimitRequestByToken, time.Duration(cfg.RateLimitTimeBlock)*time.Second)
 				_, _ = c.Allow(token, rateLimiter)
 				response.HttpResponse(
 					w, http.StatusTooManyRequests,
@@ -31,6 +31,7 @@ func Limit(c redis2.IRedis, next http.Handler) http.Handler {
 			}
 
 		} else {
+			rateLimiter, _ := c.NewRateLimit(cfg.RateLimitRequest, time.Duration(cfg.RateLimitTimeSecond)*time.Second)
 			result, _ := c.Allow(ip, rateLimiter)
 			if !result {
 				rateLimiter, _ = c.NewRateLimit(cfg.RateLimitRequest, time.Duration(cfg.RateLimitTimeBlock)*time.Second)

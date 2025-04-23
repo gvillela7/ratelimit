@@ -17,12 +17,14 @@ type config struct {
 }
 
 type APIConfig struct {
-	Port                string
-	Environment         string
-	Timezone            string
-	RateLimitRequest    int
-	RateLimitTimeSecond int
-	RateLimitTimeBlock  int
+	Port                       string
+	Environment                string
+	Timezone                   string
+	RateLimitRequest           int
+	RateLimitTimeSecond        int
+	RateLimitRequestByToken    int
+	RateLimitTimeSecondByToken int
+	RateLimitTimeBlock         int
 }
 type RedisConfig struct {
 	Host     string
@@ -50,12 +52,14 @@ func Load(path string) error {
 	}
 
 	apiConfig := APIConfig{
-		Port:                viper.GetString("api.port"),
-		Environment:         viper.GetString("api.environment"),
-		Timezone:            viper.GetString("api.timezone"),
-		RateLimitRequest:    viper.GetInt("api.rate_limit_request"),
-		RateLimitTimeSecond: viper.GetInt("api.rate_limit_time_second"),
-		RateLimitTimeBlock:  viper.GetInt("api.rate_limit_time_block_second"),
+		Port:                       viper.GetString("api.port"),
+		Environment:                viper.GetString("api.environment"),
+		Timezone:                   viper.GetString("api.timezone"),
+		RateLimitRequest:           viper.GetInt("api.rate_limit_request"),
+		RateLimitRequestByToken:    viper.GetInt("api.rate_limit_request_by_token"),
+		RateLimitTimeSecond:        viper.GetInt("api.rate_limit_time_second"),
+		RateLimitTimeSecondByToken: viper.GetInt("api.rate_limit_time_second_by_token"),
+		RateLimitTimeBlock:         viper.GetInt("api.rate_limit_time_block_second"),
 	}
 
 	if apiErr := apiConfig.Validate(); apiErr != nil {
@@ -111,6 +115,8 @@ func (a APIConfig) Validate() error {
 		validation.Field(&a.Timezone, validation.Required),
 		validation.Field(&a.RateLimitRequest, validation.Required),
 		validation.Field(&a.RateLimitTimeSecond, validation.Required),
+		validation.Field(&a.RateLimitRequestByToken, validation.Required),
+		validation.Field(&a.RateLimitTimeSecondByToken, validation.Required),
 		validation.Field(&a.RateLimitTimeBlock, validation.Required),
 	)
 }
